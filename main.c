@@ -12,7 +12,29 @@ typedef struct binTree {
 
 void help(){
     printf("List of Commands\n");
-    printf("jhsfjs\n");
+    printf("\n");
+}
+
+
+
+void preOrder(binTree** tree){
+    //make the arithmetic into preOrder
+}
+
+void inOrder(binTree** tree){
+    //make the arithmetic into inOrder
+}
+
+void postOrder(binTree** tree){
+    //make the arithmetic into postOrder
+}
+
+void printTree(binTree** tree){
+    //prints the binary tree
+}
+
+void printOrder(binTree** tree){
+    //prints the arithmetic based on the users input.
 }
 
 
@@ -20,17 +42,13 @@ void help(){
 
 
 
+//takes an input from the user.
 int main(int argc, char* argv[]){
-    //printf("%s\n", argv[1]);
-    //printf("%d\n", argc);
 
     if(strcmp(argv[1], "--help") == 0){
         help();
     }
-    char expression[20];
-    strcpy(expression, argv[1]);
 
-    printf("\t%c\n", expression[0]);
 
     return 0;
 }
