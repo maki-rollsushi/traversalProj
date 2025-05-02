@@ -234,20 +234,15 @@ void guide() {
     printf("\t******************************************************************************\n\n");
 }
 // Helper function to create a new tree node
-
-
 void initStack(TreeStack* s) {
     s->top = -1;
 }
-
 int isEmpty(TreeStack* s) {
     return s->top == -1;
 }
-
 int isFull(TreeStack* s) {
     return s->top == MAX_STACK_SIZE - 1;
 }
-
 void push(TreeStack* s, binTree* node) {
     if (!isFull(s)) {
         s->items[++(s->top)] = node;
@@ -255,7 +250,6 @@ void push(TreeStack* s, binTree* node) {
         printf("Error: Stack overflow.\n");
     }
 }
-
 binTree* pop(TreeStack* s) {
     if (!isEmpty(s)) {
         return s->items[(s->top)--];
@@ -264,19 +258,16 @@ binTree* pop(TreeStack* s) {
         return NULL;
     }
 }
-
 binTree* createNode(char data) {
     binTree* node = (binTree*)malloc(sizeof(binTree));
     node->data = data;
     node->left = node->right = NULL;
     return node;
 }
-
 // Return the root of the built expression tree
 binTree* buildPostfix(const char* expression) {
     TreeStack stack;
     initStack(&stack);
-
     for (int i = 0; expression[i] != '\0'; ++i) {
         char token = expression[i];
 
@@ -289,7 +280,6 @@ binTree* buildPostfix(const char* expression) {
         } else if (isOperator(token)) {
             // Operator
             binTree* node = createNode(token);
-
             // Right and left operands must be popped
             binTree* right = pop(&stack);
             binTree* left = pop(&stack);
@@ -314,66 +304,49 @@ binTree* buildPostfix(const char* expression) {
         printf("Error: Malformed expression, remaining elements in stack.\n");
         return NULL;
     }
-
     return pop(&stack);
 }
-
-
-
 // Assumes binTree, createNode, isOperator are already defined
-
 // Recursive helper for prefix parsing
 binTree* buildFromPrefix(const char** expression) {
     while (**expression == ' ') (*expression)++;  // skip spaces
-
     if (**expression == '\0') {
         fprintf(stderr, "Error: Unexpected end of expression.\n");
         return NULL;
     }
-
     char c = **expression;
     (*expression)++;  // advance past current character
-
     if (!isOperator(c) && !isalnum(c)) {
         fprintf(stderr, "Error: Invalid character '%c' in expression.\n", c);
         return NULL;
     }
-
     binTree* node = createNode(c);
-
     if (isOperator(c)) {
         node->left = buildFromPrefix(expression);
         if (!node->left) {
             fprintf(stderr, "Error: Missing left operand for operator '%c'.\n", c);
             return NULL;
         }
-
         node->right = buildFromPrefix(expression);
         if (!node->right) {
             fprintf(stderr, "Error: Missing right operand for operator '%c'.\n", c);
             return NULL;
         }
     }
-
     return node;
 }
 
 binTree* buildPrefix(const char* expression) {
     return buildFromPrefix(&expression);
 }
-
-
-
 //using Shunting-Yard algorithm to turn it into a postfix then call buildPostfix to make it into a tree.
 binTree* buildInfix(const char* expression) {
     char postfix[1024] = "";         // Stores the postfix expression
     char stack[1024];               // Operator stack
     int top = -1;                   // Top index of stack
     int outIndex = 0;               // Output index
-
     char token;
     char prev = '\0';
-
     // Loop through the infix expression
     for (int i = 0; expression[i] != '\0'; i++) {
         token = expression[i];
@@ -401,7 +374,6 @@ binTree* buildInfix(const char* expression) {
             printf("Error: Expression cannot end with an operator.\n");
             return NULL;
         }
-
     // Pop any remaining operators
     while (top >= 0) {
         if (!isOperator(stack[top])) {
@@ -413,7 +385,6 @@ binTree* buildInfix(const char* expression) {
     }
 
     postfix[outIndex] = '\0'; // Null-terminate the output string
-
     // Call buildPostfix with the resulting postfix expression
     return buildPostfix(postfix);
 }
@@ -433,8 +404,6 @@ int isLeftAssociative(char op) {
     return 1; 
 }
 
-
-
 //print left and right first
 void printPostfix(binTree* root) {
     if (root == NULL) return;
@@ -442,7 +411,6 @@ void printPostfix(binTree* root) {
     printPostfix(root->right);
     printf("%c ", root->data);
 }
-
 
 //print operation first then left and right
 void printPrefix(binTree* root) {
