@@ -63,7 +63,7 @@ notation-converter --from postfix --to prefix "a b c * +"
 ---
 ## AVAILABLE COMMANDS
 
-- `-h` or `--help`    : Display short usage instructions  
+- `--h` or `--help`    : Display short usage instructions  
 - `--guide`           : Show detailed usage, rules, and examples  
 
 ---
