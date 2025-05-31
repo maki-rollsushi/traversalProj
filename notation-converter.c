@@ -50,7 +50,7 @@ void guide();
 
 //takes an input from the user.
 int main(int argc, char* argv[]) {
-    //Only one input possibly -h, --help or --guide
+    //Only one input possibly --h, --help or --guide
     if (argc == 2) {
         if (strcmp(argv[1], "--h") == 0 || strcmp(argv[1], "--help") == 0) {
             help();
@@ -136,7 +136,7 @@ int main(int argc, char* argv[]) {
         }
     }
     else {
-        printf("Error: Incorrect number of arguments.\nUse input \"notation-converter -h\" or \"notation-converter  --help\" for usage.\n");
+        printf("Error: Incorrect number of arguments.\nUse input \"notation-converter --h\" or \"notation-converter  --help\" for usage.\n");
         return 1;   
     }
     return 0;
@@ -151,9 +151,10 @@ void help() {
     printf("\t*                                                                            *\n");
     printf("\t* USAGE:                                                                     *\n");
     printf("\t* For Linux:                                                                 *\n");
-    printf("\t*   ./notation-converter --from <input_format> --to <output_format> \"expr\"   *\n");
+    printf("\t*    ./notation-converter --from <input_format> --to <output_format> \"expr\"  *\n");
+    printf("\t*                                                                            *\n");
     printf("\t* For Windows:                                                               *\n");
-    printf("\t*   notation-converter --from <input_format> --to <output_format> \"expr\"     *\n");
+    printf("\t*    notation-converter --from <input_format> --to <output_format> \"expr\"    *\n");
     printf("\t*                                                                            *\n");
     printf("\t* PARAMETERS:                                                                *\n");
     printf("\t*   <input_format>  : infix | prefix | postfix                               *\n");
@@ -163,9 +164,15 @@ void help() {
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* EXAMPLES:                                                                  *\n");
+    printf("\t* Linux:                                                                     *\n");
     printf("\t*   ./notation-converter --from infix --to postfix \"a+b\"                     *\n");
     printf("\t*   ./notation-converter --from prefix --to infix \"+ a b\"                    *\n");
     printf("\t*   ./notation-converter --from postfix --to prefix \"a b +\"                  *\n");
+    printf("\t*                                                                            *\n");
+    printf("\t* Windows:                                                                   *\n");
+    printf("\t*   notation-converter --from infix --to postfix \"a+b\"                       *\n");
+    printf("\t*   notation-converter --from prefix --to infix \"+ a b\"                      *\n");
+    printf("\t*   notation-converter --from postfix --to prefix \"a b +\"                    *\n");
     printf("\t*                                                                            *\n");
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
@@ -201,8 +208,11 @@ void guide() {
     printf("\t* HOW TO RUN THE PROGRAM:                                                    *\n");
     printf("\t* For Linux:                                                                 *\n");
     printf("\t*   ./notation-converter --from <input_format> --to <output_format> \"expr\"   *\n");
+    printf("\t*                                                                            *\n");
     printf("\t* For Windows:                                                               *\n");
     printf("\t*   notation-converter --from <input_format> --to <output_format> \"expr\"     *\n");
+    printf("\t*                                                                            *\n");
+    printf("\t* Definitions:                                                               *\n");
     printf("\t*   <input_format>  : infix | prefix | postfix                               *\n");
     printf("\t*   <output_format> : infix | prefix | postfix                               *\n");
     printf("\t*   \"expression\"   : The expression in quotes (esp. if it has spaces)        *\n");
