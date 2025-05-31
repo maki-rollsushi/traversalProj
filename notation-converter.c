@@ -177,7 +177,7 @@ void help() {
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* OTHER OPTIONS:                                                             *\n");
-    printf("\t*   --h, --help   : Display this help menu                                    *\n");
+    printf("\t*   --h, --help   : Display this help menu                                   *\n");
     printf("\t*   --guide      : Show full user guide with rules, details, and examples    *\n");
     printf("\t*                                                                            *\n");
     printf("\t******************************************************************************\n\n\n");
