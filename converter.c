@@ -1,3 +1,14 @@
+/* Programming Project 1: Notation-Converter CLI
+ *  Subject: CS 110 - Discrete Structures 2
+ *  Course and Bloc: BSCS 2A
+ *  Project Members:
+ *      Dela Cruz, Mark L.
+ *      Gamis, Shana Aislinn
+ *      Tabayag, Xaris Joy
+*/
+
+
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -17,9 +28,17 @@ typedef struct {
     int top;
 } TreeStack;
 
-typedef enum { FORMAT_INVALID, FORMAT_INFIX, FORMAT_PREFIX, FORMAT_POSTFIX } Format;
+typedef enum {
+    FORMAT_HELP, 
+    FORMAT_GUIDE, 
+    FORMAT_INVALID, 
+    FORMAT_INFIX, 
+    FORMAT_PREFIX, 
+    FORMAT_POSTFIX 
+} Format;
 
 // ------------------ Stack Operations ------------------
+
 void initStack(TreeStack* s) { s->top = -1; }
 int isEmpty(TreeStack* s) { return s->top == -1; }
 int isFull(TreeStack* s) { return s->top == MAX - 1; }
@@ -52,6 +71,7 @@ void freeTree(binTree* root) {
 
 // ------------------ Helper Functions ------------------
 int strEquals(const char* a, const char* b) { return strcmp(a, b) == 0; }
+
 int precedence(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/') return 2;
@@ -61,6 +81,8 @@ int isOperator(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
 int isLeftAssociative(char op) { return 1; }
 
 Format parseFormat(const char* str) {
+    if (strEquals(str, "--h") || strEquals(str, "--help")) return FORMAT_HELP;
+    if (strEquals(str, "--guide")) return FORMAT_GUIDE;
     if (strEquals(str, "infix")) return FORMAT_INFIX;
     if (strEquals(str, "prefix")) return FORMAT_PREFIX;
     if (strEquals(str, "postfix")) return FORMAT_POSTFIX;
@@ -331,13 +353,18 @@ int processConversion(const char* fromStr, const char* toStr, const char* expres
 // ------------------ Main Function ------------------
 int main(int argc, char* argv[]) {
     if (argc == 2) {
-        if (strEquals(argv[1], "--h") || strEquals(argv[1], "--help")) help();
-        else if (strEquals(argv[1], "--guide")) guide();
-        else printf("Error: Unknown option.\n");
+        Format manual = parseFormat(argv[1]); 
+        switch(manual) {
+            case FORMAT_HELP: help(); break;
+            case FORMAT_GUIDE: guide(); break;
+            default:
+                printf("Error: Incorrect arguments. Use --help for usage.\n");
+                return 1; 
+        }    
     } else if (argc == 6 && strEquals(argv[1], "--from") && strEquals(argv[3], "--to")) {
         return processConversion(argv[2], argv[4], argv[5]);
     } else {
-        printf("Error: Incorrect arguments. Use --help for usage.\n");
+        printf("Error: Incorrect arguments. Use --help for usage.\n ");
         return 1;
     }
     return 0;
