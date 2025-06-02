@@ -84,7 +84,7 @@ To ensure successful conversion, follow these rules:
 - ✅ Supported operators: `+`, `-`, `*`, `/`
 - ✅ Spaces between characters are optional
 - ✅ Wrap expressions with quotes if they contain spaces (e.g., `"a + b"`)
-- ❌ Do not end expressions with an operator (e.g., `"a +"` is invalid)
+- ❌ Do not end expressions with an operator for infix (e.g., `"a +"` is invalid)
 - ❌ Negative numbers, floating-point values, or unary operations are not supported
 - ❌ No implicit multiplication (e.g., `2a` is invalid)
 
