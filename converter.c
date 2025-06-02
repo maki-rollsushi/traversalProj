@@ -310,7 +310,7 @@
         printf("\t*   - No parentheses are allowed                                             *\n");
         printf("\t*   - Supported operators: +, -, *, /                                        *\n");
         printf("\t*   - Spaces between characters are optional                                 *\n");
-        printf("\t*   - Must use quotations \"a + b\" when including spaces                    *\n");
+        printf("\t*   - Must use quotations \"a + b\" when including spaces                      *\n");
         printf("\t*                                                                            *\n");
         printf("\t******************************************************************************\n");
         printf("\t*                                                                            *\n");
@@ -349,7 +349,7 @@
         printf("\t*   The program couldn't convert the expression into a tree.                 *\n");
         printf("\t*   Fix: Check your expression for errors.                                   *\n");
         printf("\t*                                                                            *\n");
-        printf("\t* Expression cannot end with an operator (for infix):                         *\n");
+        printf("\t* Expression cannot end with an operator (for infix):                        *\n");
         printf("\t*   You ended with an operator like '+'.                                     *\n");
         printf("\t*   Fix: Make sure expressions end with a variable or number.                *\n");
         printf("\t*                                                                            *\n");
