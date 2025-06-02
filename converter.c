@@ -95,72 +95,99 @@ binTree* buildPostfix(const char* expression) {
     initStack(&stack);
     for (int i = 0; expression[i] != '\0'; ++i) {
         char token = expression[i];
-        if (isspace(token)) continue;
-
-        if (isalnum(token)) {
-            push(&stack, createNode(token));
+        if (isspace(token)) continue;    
+        if (isalnum(token)) {             
+            binTree* operand = createNode(token);
+            push(&stack, operand);
         } else if (isOperator(token)) {
+            binTree* node = createNode(token);
             binTree* right = pop(&stack);
             binTree* left = pop(&stack);
-            if (!left || !right) return NULL;
-            binTree* node = createNode(token);
+
+            if (!left || !right) {
+                printf("Error: Invalid postfix expression.\n");
+                return NULL;
+            }
             node->left = left;
             node->right = right;
             push(&stack, node);
         } else {
-            printf("Error: Invalid character '%c'.\n", token);
+            printf("Error: Invalid character '%c' in expression.\n", token);
             return NULL;
         }
     }
-    return (stack.top == 0) ? pop(&stack) : NULL;
+    if (stack.top != 0) {
+        printf("Error: Malformed expression, remaining elements in stack.\n");
+        return NULL;
+    }
+    return pop(&stack);
 }
 
 binTree* buildPrefix(const char** expression) {
-    while (**expression == ' ') (*expression)++;
-    if (**expression == '\0') return NULL;
-
+    while (isspace(**expression)) (*expression)++;  // skip spaces
+    if (**expression == '\0') {
+        fprintf(stderr, "Error: Unexpected end of expression.\n");
+        return NULL;
+    }
     char c = **expression;
-    (*expression)++;
-
-    if (!isOperator(c) && !isalnum(c)) return NULL;
+    (*expression)++;  // advance past current character
+    if (!isOperator(c) && !isalnum(c)) {
+        fprintf(stderr, "Error: Invalid character '%c' in expression.\n", c);
+        return NULL;
+    }
     binTree* node = createNode(c);
-
     if (isOperator(c)) {
         node->left = buildPrefix(expression);
+        if (!node->left) {
+            fprintf(stderr, "Error: Missing left operand for operator '%c'.\n", c);
+            return NULL;
+        }
         node->right = buildPrefix(expression);
-        if (!node->left || !node->right) return NULL;
+        if (!node->right) {
+            fprintf(stderr, "Error: Missing right operand for operator '%c'.\n", c);
+            return NULL;
+        }
     }
     return node;
 }
 
 binTree* buildInfix(const char* expression) {
-    char postfix[1024] = "";
-    char stack[1024];
-    int top = -1, outIndex = 0;
-    char token, prev = '\0';
-
+    char postfix[100] = "";        
+    char stack[100];              
+    int top = -1;                   
+    int outIndex = 0;          
+    char token;
+    char prev = '\0';
     for (int i = 0; expression[i] != '\0'; i++) {
         token = expression[i];
-        if (isspace(token)) continue;
-
+        if (isspace(token)) continue; 
         if (isalnum(token)) {
             postfix[outIndex++] = token;
             postfix[outIndex++] = ' ';
-        } else if (isOperator(token)) {
+        } 
+        else if (isOperator(token)) {
             while (top >= 0 && isOperator(stack[top]) &&
-                   isLeftAssociative(token) && precedence(token) <= precedence(stack[top])) {
-                postfix[outIndex++] = stack[top--];
+                   (precedence(token) <= precedence(stack[top]))) {
+                postfix[outIndex++] = stack[top--];  
                 postfix[outIndex++] = ' ';
             }
             stack[++top] = token;
         }
         prev = token;
     }
-
-    if (isOperator(prev)) return NULL;
-    while (top >= 0) postfix[outIndex++] = stack[top--], postfix[outIndex++] = ' ';
-    postfix[outIndex] = '\0';
-
+    if (isOperator(prev)) {
+            printf("Error: Expression cannot end with an operator.\n");
+            return NULL;
+        }
+    while (top >= 0) {
+        if (!isOperator(stack[top])) {
+            printf("Error: Invalid operator on stack.\n");
+            return NULL;
+        }
+        postfix[outIndex++] = stack[top--];
+        postfix[outIndex++] = ' ';
+    }
+    postfix[outIndex] = '\0'; 
     return buildPostfix(postfix);
 }
 
@@ -197,7 +224,11 @@ void help() {
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* USAGE:                                                                     *\n");
-    printf("\t*   ./notation-converter --from <input_format> --to <output_format> \"expr\"   *\n");
+    printf("\t* For Linux:                                                                 *\n");
+    printf("\t*    ./notation-converter --from <input_format> --to <output_format> \"expr\"  *\n");
+    printf("\t*                                                                            *\n");
+    printf("\t* For Windows:                                                               *\n");
+    printf("\t*    notation-converter --from <input_format> --to <output_format> \"expr\"    *\n");
     printf("\t*                                                                            *\n");
     printf("\t* PARAMETERS:                                                                *\n");
     printf("\t*   <input_format>  : infix | prefix | postfix                               *\n");
@@ -207,18 +238,27 @@ void help() {
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* EXAMPLES:                                                                  *\n");
+    printf("\t* Linux:                                                                     *\n");
     printf("\t*   ./notation-converter --from infix --to postfix \"a+b\"                     *\n");
     printf("\t*   ./notation-converter --from prefix --to infix \"+ a b\"                    *\n");
     printf("\t*   ./notation-converter --from postfix --to prefix \"a b +\"                  *\n");
     printf("\t*                                                                            *\n");
+    printf("\t* Windows:                                                                   *\n");
+    printf("\t*   notation-converter --from infix --to postfix \"a+b\"                       *\n");
+    printf("\t*   notation-converter --from prefix --to infix \"+ a b\"                      *\n");
+    printf("\t*   notation-converter --from postfix --to prefix \"a b +\"                    *\n");
+    printf("\t*                                                                            *\n");
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* OTHER OPTIONS:                                                             *\n");
-    printf("\t*   --h, --help   : Display this help menu                                    *\n");
-    printf("\t*   --guide      : Show full user guide with rules, details, and examples    *\n");
+    printf("\t*   notation -convetver --h   :   Display this help menu                     *\n");
+    printf("\t*   notation-converter --help :   Display this help menu                     *\n");
+    printf("\t*   notation-converter --guide:   Show full user guide with                  *\n");
+    printf("\t*                                 rules, details, and examples               *\n");
     printf("\t*                                                                            *\n");
     printf("\t******************************************************************************\n\n\n");
 }
+
 
 void guide() {
     printf("\n\n\t******************************************************************************\n");
@@ -242,7 +282,13 @@ void guide() {
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* HOW TO RUN THE PROGRAM:                                                    *\n");
+    printf("\t* For Linux:                                                                 *\n");
     printf("\t*   ./notation-converter --from <input_format> --to <output_format> \"expr\"   *\n");
+    printf("\t*                                                                            *\n");
+    printf("\t* For Windows:                                                               *\n");
+    printf("\t*   notation-converter --from <input_format> --to <output_format> \"expr\"     *\n");
+    printf("\t*                                                                            *\n");
+    printf("\t* Definitions:                                                               *\n");
     printf("\t*   <input_format>  : infix | prefix | postfix                               *\n");
     printf("\t*   <output_format> : infix | prefix | postfix                               *\n");
     printf("\t*   \"expression\"   : The expression in quotes (esp. if it has spaces)        *\n");
@@ -264,22 +310,23 @@ void guide() {
     printf("\t*   - No parentheses are allowed                                             *\n");
     printf("\t*   - Supported operators: +, -, *, /                                        *\n");
     printf("\t*   - Spaces between characters are optional                                 *\n");
+    printf("\t*   - Must use quotations \"a + b\" when including spaces                    *\n");
     printf("\t*                                                                            *\n");
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* Example Conversions:                                                       *\n");
     printf("\t*   Input : ./notation-converter --from infix --to postfix \"a+b*c\"           *\n");
-    printf("\t*   Output: a b c * +                                                        *\n");
+    printf("\t*   # Output: a b c * +                                                      *\n");
     printf("\t*                                                                            *\n");
     printf("\t*   Input : ./notation-converter --from postfix --to prefix \"a b + c *\"      *\n");
-    printf("\t*   Output: * + a b c                                                        *\n");
+    printf("\t*   # Output: * + a b c                                                      *\n");
     printf("\t*                                                                            *\n");
     printf("\t******************************************************************************\n");
     printf("\t*                                                                            *\n");
     printf("\t* Common Errors & What They Mean:                                            *\n");
     printf("\t*                                                                            *\n");
     printf("\t* Unknown option:                                                            *\n");
-    printf("\t*   You typed a flag that isn't --help, -h, or --guide.                      *\n");
+    printf("\t*   You typed a flag that isn't --help, --h, or --guide.                     *\n");
     printf("\t*   Fix: Only use those options for help.                                    *\n");
     printf("\t*                                                                            *\n");
     printf("\t* Incorrect number of arguments:                                             *\n");
@@ -302,7 +349,7 @@ void guide() {
     printf("\t*   The program couldn't convert the expression into a tree.                 *\n");
     printf("\t*   Fix: Check your expression for errors.                                   *\n");
     printf("\t*                                                                            *\n");
-    printf("\t* Expression cannot end with an operator:                                    *\n");
+    printf("\t* Expression cannot end with an operator (for infix):                         *\n");
     printf("\t*   You ended with an operator like '+'.                                     *\n");
     printf("\t*   Fix: Make sure expressions end with a variable or number.                *\n");
     printf("\t*                                                                            *\n");
@@ -364,7 +411,7 @@ int main(int argc, char* argv[]) {
     } else if (argc == 6 && strEquals(argv[1], "--from") && strEquals(argv[3], "--to")) {
         return processConversion(argv[2], argv[4], argv[5]);
     } else {
-        printf("Error: Incorrect arguments. Use --help for usage.\n ");
+        printf("Error: Incorrect arguments. Input \"notation-converter --help\" for usage.\n ");
         return 1;
     }
     return 0;
