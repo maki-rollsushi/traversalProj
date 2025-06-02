@@ -84,7 +84,6 @@ To ensure successful conversion, follow these rules:
 - ✅ Supported operators: `+`, `-`, `*`, `/`
 - ✅ Spaces between characters are optional
 - ✅ Wrap expressions with quotes if they contain spaces (e.g., `"a + b"`)
-- ❌ Do not end expressions with an operator for infix (e.g., `"a +"` is invalid)
 - ❌ Negative numbers, floating-point values, or unary operations are not supported
 - ❌ No implicit multiplication (e.g., `2a` is invalid)
 
@@ -142,33 +141,14 @@ To ensure successful conversion, follow these rules:
 
 ---
 
-## OPTIONAL: UNIT TESTING
-
-Add a `tests.c` file for:
-- Expression tree validation
-- Conversion accuracy
-- Error handling edge cases
-
-**Sample test cases:**
-- `"a+b*c"` → `a b c * +`
-- `"+ a b"` → `a b +`
-- `"a b + c *"` → `* + a b c`
-
----
-
-## OPTIONAL: BINARIES
-
-You may include precompiled executables:
-- `notation-converter` (Linux)
-- `notation-converter.exe` (Windows)
-
----
-
 ## FOR MORE HELP
 
 Run the built-in guide:
 ```bash
 ./notation-converter --guide
+```
+```bash
+notation-converter --guide
 ```
 
 This shows:
