@@ -10,13 +10,13 @@ A command-line tool to convert arithmetic expressions between **infix**, **prefi
 ### Linux (Ubuntu)
 Ensure you have GCC installed. Compile the program using:
 ```bash
-gcc -o notation-converter main.c
+gcc -o notation-converter converter.c
 ```
 
 ### Windows (CMD with MinGW)
 Use the following command:
 ```cmd
-gcc -o notation-converter.exe main.c
+gcc -o notation-converter.exe converter.c
 ```
 
 This will create an executable named `notation-converter` (Linux) or `notation-converter.exe` (Windows).
